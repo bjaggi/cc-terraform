@@ -1,86 +1,64 @@
-variable "confluent_cloud_api_key" {
-  description = "Confluent Cloud API Key (also referred as Cloud API ID)"
-  type        = string
-}
-
-variable "confluent_cloud_api_secret" {
-  description = "Confluent Cloud API Secret"
-  type        = string
-  sensitive   = true
-}
-
-
 variable "confluent_cloud_env_id" {
-  description = "Confluent Cloud Environment "
+  description = "Confluent Cloud Environment Id "
   type        = string
   sensitive   = false
 }
 
 variable "confluent_cloud_cluster_id" {
-  description = "Confluent Cloud Cluster  "
+  description = "Confluent Cloud CLuster Id "
+  type        = string
+  sensitive   = false
+}
+# Service Account Credentials to create the topic ( requires a lower RBAC & a CLuster Key)
+
+variable "confluent_cloud_api_key" {
+  description = "topic rbac admin apikey "
   type        = string
   sensitive   = false
 }
 
-
-variable "cluster_cloud" {
-  description = "Confluent Cloud Cloud Provider "
+variable "confluent_cloud_api_secret" {
+  description = "topic rbac admin apisecret "
   type        = string
   sensitive   = false
 }
 
-variable "customer_project_id" {
-  description = "Confluent Cloud Project Id "
-  type        = string
-  sensitive   = false
-}
-
-    variable "cluster_display_name" {
-  description = "Confluent Cloud name "
-  type        = string
-  sensitive   = false
-}
-    variable "cluster_availability" {
-  description = "Confluent Cloud availability "
-  type        = string
-  sensitive   = false
+# Service Account Credentials to create the topic ( requires a lower RBAC)
+variable "admin_sa" {
+  type = object({
+    id     = string
+    secret = string
+  })
 }
 
 
-variable "cluster_subnet_name_by_zone" {
-  description = "A map of Zone to Subnet Name"
-  type        = map(string)
+# RBAC enabled */
+variable "rbac_enabled" {
+  description = "Enable RBAC. If true producer/consumer will be used to configure Role Bindings for the Topic"
+  type = bool
+  default = false
 }
 
-    variable "cluster_region" {
-  description = "Confluent Cloud region "
-  type        = string
-  sensitive   = false
-}
-    variable "cluster_type" {
-  description = "Confluent Cloud type "
-  type        = string
-  sensitive   = false
-}
-    variable "cluster_cku" {
-  description = "Confluent Cloud cku "
-  type        = string
-  sensitive   = false
-}
-     
-
-
-variable "customer_vpc_network" {
-  description = "The VPC network name to provision Private Service Connect endpoint to Confluent Cloud"
-  type        = string
+variable "producer_sa_name" {
+  type = string
 }
 
-variable "customer_subnetwork_name" {
-  description = "The subnetwork name to provision Private Service Connect endpoint to Confluent Cloud"
-  type        = string
+variable "consumer_sa_name" {
+  type = string
 }
 
-variable "subnet_name_by_zone" {
-  description = "A map of Zone to Subnet Name"
-  type        = map(string)
+
+# Topic definition list 
+variable "topics" {
+  type = list(object({
+    name = string
+    partitions = number
+    config =  map(string)
+    consumer = optional(string)
+    producer = optional(string)
+  }))
+  description = "List of Topics. If RBAC enabled producer service account will be configured as DeveloperWrite and consumer will be configured as DeveloperRead."
 }
+
+
+

@@ -1,9 +1,22 @@
 output "resource-ids" {
   value = <<-EOT
-  Environment ID:   ${data.confluent_environment.bell_env.id}
-  Confluent Cluster ID :  ${ confluent_kafka_cluster.bell_cluster.id}
-  Bell First Topic : ${confluent_kafka_topic.bell_topic.config}
+  Following Topics and Rbac will be create on the listed cluster : 
+  
+  Environment ID:   ${data.confluent_environment.openai_env.id}
+  Confluent Cluster ID :  ${ data.confluent_kafka_cluster.openai_cluster.id}
   
   EOT
 
+}
+
+
+output "topics" {
+  value = {
+    for k, t in module.topic : k => {
+      id         = t.created_topic.id
+      name       = t.created_topic.topic_name
+      partitions = t.created_topic.partitions_count
+      config     = t.created_topic.config
+    }
+  }
 }

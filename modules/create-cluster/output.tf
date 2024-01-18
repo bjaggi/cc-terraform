@@ -1,7 +1,9 @@
 output "resource-ids" {
   value = <<-EOT
-  Environment ID:   ${data.confluent_environment.bell_env.id}
-
+  Following Recources were created: 
+  Environment ID:   ${confluent_environment.customer_env.id}
+  Cluster ID :  ${confluent_kafka_cluster.customer_cluster.id}
+  
   
   EOT
 
