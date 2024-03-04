@@ -14,5 +14,14 @@ cluster_cku="2"
 cluster_type="standard"
 
 
-
+topics = {
+   {
+    name=topic-a,
+    partitions=1
+  },
+  {
+    name=topic-2,
+    partitions=2
+  }
+}
 
